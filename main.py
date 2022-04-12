@@ -1,7 +1,48 @@
 from errors import DBError, ParamError
 import json
 class DB:
+    """
+    
+    Attributes
+    ----------
+    params : dict
+        DB Params.
+    params.filename : str
+        DB File.
+    params.name : str
+        DB Name.
+
+    Methods
+    -------
+    write()
+        Writing changes.
+    get()
+        Retrieving all entries.
+    search(params: dict)
+        Searching entry by keys.
+    new(json: dict)
+        Creating entry.
+    remove(params: dict)
+        Removing entry by key.
+    clear()
+        Clear DB.
+    include(values: dict)
+        Add some values to all entries if they don't have this value.
+    includeKey(searchfilter: dict, values: dict)
+        Add some values to all entries with some key if they don't have this value.
+    """
     def __init__(self, params: dict):
+        """ SimpleDB. Hello world! 
+        
+        Parameters
+        ----------
+        params : dict
+            DB Params.
+        params.filename : str
+            DB File.
+        params.name : str
+            DB Name.
+        """
         if params == None:
             raise ParamError("No params!")
 
@@ -27,14 +68,23 @@ class DB:
 
 
     def write(self):
+        """ Writing changes. """
         file = open(self.filename, "w+")
         file.write(json.dumps(self.db, indent=4))
         return True
 
     def get(self):
+        """ Retrieving all entries. """
         return self.db[self.name]
 
     def search(self, params: dict):
+        """ Searching entry by dict 
+        
+        Parameters
+        ----------
+        params : dict
+            Search filter.
+            """
         if params == None:
             raise ParamError("No params!")
 
@@ -46,13 +96,26 @@ class DB:
         return database
 
     def new(self, json: dict):
+        """ Creating entry. 
+        
+        Parameters
+        ----------
+        json : dict
+            Entry, that gonna be added."""
         if type(json) is not dict:
             raise ParamError("No JSON introduced!")
 
         self.db[self.name].append(json)
         return json
 
-    def remove(self, params):
+    def remove(self, params: dict):
+        """ Removing entry by key. 
+        
+        Parameters
+        ----------
+        params : dict
+            Search filter.
+            """
         if params == None:
             raise ParamError("No params!")
         
@@ -65,10 +128,18 @@ class DB:
         return True
 
     def clear(self):
+        """ Clean DB. """
         self.db[self.name] = []
         return True
     
     def include(self, values: dict):
+        """ Add some values to all entries if they don't have this value. 
+        
+        Parameters
+        ----------
+        values : dict
+            Values, that gonna be included to entry.
+        """
         if values == None:
             raise ParamError("No values!")
         
@@ -88,6 +159,13 @@ class DB:
         return added
 
     def includeKey(self, searchfilter: dict, values: dict):
+        """ Add some values to all entries with some key if they don't have this value. 
+        
+        Parameters
+        ----------
+        values : dict
+            Values, that gonna be included to entry.
+        """
         if searchfilter == None:
             raise ParamError("No SearchFilter!")
 
